@@ -256,15 +256,16 @@ int main(int argc, char *argv[]){
     
         //send shared memory key to worker for children to use 
         if (childpid == 0){ 
+             struct PCB secNano;
 
-            char termSec_string[50];
-            char termNano_string[50];
+            // char termSec_string[50];
+            // char termNano_string[50];
 
-            snprintf(termSec_string, sizeof(termSec_string), "%i", seconds);
-            snprintf(termNano_string, sizeof(termNano_string), "%i", nanoseconds);
+            // snprintf(termSec_string, sizeof(termSec_string), "%i", seconds);
+            // snprintf(termNano_string, sizeof(termNano_string), "%i", nanoseconds);
 
-            msq.termSec_string;
-            msq.termNano_string;
+            secNano.sec;
+            secNano.nano;
 
             // Write or append message into message queue
             // int msgsnd(int msgid, const void *msgp, size_t msgsz, int msgflg)
@@ -272,7 +273,7 @@ int main(int argc, char *argv[]){
             // msgp = pointer to the message sent to the caller
             // msgsz = size of message (positive. zero if left empty)
             // msgflg = IPC_NOWAIT (returns immediately when no message is found in queue or MSG_NOERROR (truncates message text, if more than msgsz bytes)
-            msgsnd(msqid, &msq, sizeof(msq) + 1, 0);
+            msgsnd(msqid, &secNano, sizeof(secNano) + 1, 0);
 
             printf("data sent in sec and nano: %s", msq);
 
