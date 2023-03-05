@@ -11,7 +11,7 @@ int main(int argc, char *argv[]){
     struct PCB secNano;
 
     // //grab sh_key, random second, and random nanosecond from oss
-    // int sh_key = atoi(argv[1]);
+    int sh_key = atoi(argv[1]);
     // int sec = atoi(argv[2]);
     // int nano = atoi(argv[3]);
 

@@ -258,7 +258,9 @@ int main(int argc, char *argv[]){
 
             // char termSec_string[50];
             // char termNano_string[50];
+            char sh_key_string[50];
 
+            snprintf(sh_key_string, sizeof(sh_key_string), "%i", sh_key);
             // snprintf(termSec_string, sizeof(termSec_string), "%i", seconds);
             // snprintf(termNano_string, sizeof(termNano_string), "%i", nanoseconds);
 
@@ -276,8 +278,8 @@ int main(int argc, char *argv[]){
             printf("data sent in sec and nano: %s", msq);
 
             // //exec function to send children to worker
-            // char *args[] = {"worker", sh_key_string, termSec_string, termNano_string, NULL};
-            // execvp("./worker", args);
+            char *args[] = {"worker", sh_key_string, NULL};
+            execvp("./worker", args);
 
             return 1;
         }
