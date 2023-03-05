@@ -2,6 +2,11 @@
 #include <sys/shm.h> //Shared memory
 #include "oss.h"
 
+struct msgqueue {
+    long mtype;
+    char mtext[200];
+}msq;
+
 int main(int argc, char *argv[]){
     int termTimeS;
     int termTimeNano;
@@ -14,6 +19,34 @@ int main(int argc, char *argv[]){
     int sec = atoi(argv[2]);
     int nano = atoi(argv[3]);
 
+    //Grab same key oss.c grabbed for message queue
+    key_t msgkey;
+    if((msgkey = ftok("msgkey.txt", 'a')) == (key_t) -1){
+        perror("IPC error: ftok");
+        exit(1);
+    }
+
+    //connect to the queue
+    int msqid;
+    if ((msqid = msgget(msgkey, PERMS)) == -1) {
+      perror("msgget");
+      exit(1);
+   }
+
+    //int msgrcv(int msgid, const void *msgp, size_t msgsz, long msgtype, int msgflg)
+    //msgid = recognized message queue
+    //msgp = pointer to the message recieved the caller
+    //msgsz = size of message recieved (ending w/ null character)
+    //msgtype =
+        //0 − Reads the first received message in the queue
+        //+ve − Reads the first message in the queue of type msgtype (if msgtype is 10, then reads only the first message of type 10 even though other types may be in the queue at the beginning)
+        //–ve − Reads the first message of lowest type less than or equal to the absolute value of message type (say, if msgtype is -5, then it reads first message of type less than 5 i.e., message type from 1 to 5)
+    //msgflg = IPC_NOWAIT (returns immediately when no message is found in queue or MSG_NOERROR (truncates message text, if more than msgsz bytes)
+    //recieve the message
+    msgrcv(msqid, &msq, sizeof(msq), 1, 0);
+    printf("Data Received is : %s \n", msq);
+
+    //get shared memory
     int shm_id = shmget(sh_key, sizeof(struct PCB), 0666);
     if(shm_id <= 0) {
         fprintf(stderr,"CHILD ERROR: Failed to get shared memory, shared memory id = %i\n", shm_id);
@@ -32,8 +65,8 @@ int main(int argc, char *argv[]){
     readFromMem = *shm_ptr;
 
     //Figure out when to terminate
-    termTimeS = readFromMem.sec + sec;
-    termTimeNano = readFromMem.nano + nano;
+    termTimeS = readFromMem.sec + msq;
+    termTimeNano = readFromMem.nano + msq;
     double termTogether = termTimeS + termTimeNano/BILLION;
 
 
@@ -44,7 +77,7 @@ int main(int argc, char *argv[]){
 
     double currentTime;
 
-    printf("WORKER PID: %ld PPID: %ld SysClockS: %i SysclockNano: %i TermTimeS: %i TermTimeNano: %i\n--Just Starting\n",(long)getpid(), (long)getppid(), sysClockS, sysClockNano, termTimeS, termTimeNano);
+    printf("WORKER PID: %ld PPID: %ld Received message from oss: SysClockS: %i SysclockNano: %i TermTimeS: %i TermTimeNano: %i\n--Received message\n",(long)getpid(), (long)getppid(), sysClockS, sysClockNano, termTimeS, termTimeNano);
 
     //loop child until termination time is passed 
     while(1){
@@ -65,5 +98,7 @@ int main(int argc, char *argv[]){
     //print when child has finished loop and terminating
     printf("WORKER PID: %ld PPID: %ld SysClockS: %i SysclockNano: %i TermTimeS: %i TermTimeNano: %i\n --Terminating\n",(long)getpid(), (long)getppid(), sysClockS, sysClockNano, termTimeS, termTimeNano);
 
+    // to destroy the message queue
+    msgctl(msqid, IPC_RMID, NULL);
     return 0;
 }

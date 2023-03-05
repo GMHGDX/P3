@@ -9,16 +9,22 @@
 #include <stdlib.h> //EXIT_FAILURE
 #include <unistd.h> //for pid_t and exec
 #include <sys/types.h>
-#include <time.h> // to create system time
+#include <time.h> //to create system time
 #include <sys/shm.h> //Shared memory
 #include <stdbool.h> //bool values
 #include <sys/wait.h> //wait
 #include <string.h> //remedy exit warning
+#include <sys/msg.h> //message queues
 #include "oss.h"
 
-
+#define PERMS 0644
 
 void printTable();
+
+struct msgqueue {
+    long mtype;
+    char mtext[200];
+}msq;
 
 //Create random second and nanosecond in bound of user input
 int randomNumberGenerator(int limit)
@@ -89,6 +95,10 @@ int main(int argc, char *argv[]){
             timelimit = atoi(optarg);
 			//printf("timelimit,t: %i \n", timelimit);
             break;
+        case 'f':
+            //open up the logs that are being printed to
+			//printf("timelimit,t: %i \n", timelimit);
+            break;
         default:
             printf ("Invalid option %c \n", optopt);
             return (EXIT_FAILURE);
@@ -104,6 +114,25 @@ int main(int argc, char *argv[]){
 
     //Create shared memory, key
     const int sh_key = 3147550;
+
+    //Create key using ftok()
+    key_t msqkey;
+    if((msqkey = ftok("msqkey.txt", 'a')) == (key_t) -1){
+        perror("IPC error: ftok");
+        exit(1);
+    }
+
+    printf("your message key: %i", msqkey);
+
+    //open an existing message queue or create a new one
+    //int mssgget(key_t key, int msgflg)
+    //msgflag = IPC_CREAT (creates message queue if none exists)
+    //IPC_EXCL (Used with IPC_CREAT to create the message queue and the call fails, if the message queue already exists)
+    int msqid;
+    if ((msqid = msgget(msqkey, PERMS | IPC_CREAT)) == -1) {
+      perror("msgget");
+      exit(1);
+   }
 
     int shm_id = shmget(sh_key, sizeof(struct PCB), IPC_CREAT | 0666);
     if(shm_id <= 0) {
@@ -227,17 +256,30 @@ int main(int argc, char *argv[]){
     
         //send shared memory key to worker for children to use 
         if (childpid == 0){ 
-            char sh_key_string[50];
+
             char termSec_string[50];
             char termNano_string[50];
 
-            snprintf(sh_key_string, sizeof(sh_key_string), "%i", sh_key);
             snprintf(termSec_string, sizeof(termSec_string), "%i", seconds);
             snprintf(termNano_string, sizeof(termNano_string), "%i", nanoseconds);
 
-            //exec function to send children to worker
-            char *args[] = {"worker", sh_key_string, termSec_string, termNano_string, NULL};
-            execvp("./worker", args);
+            msq.termSec_string;
+            msq.termNano_string;
+
+            // Write or append message into message queue
+            // int msgsnd(int msgid, const void *msgp, size_t msgsz, int msgflg)
+            // msgid = message queue identifier
+            // msgp = pointer to the message sent to the caller
+            // msgsz = size of message (positive. zero if left empty)
+            // msgflg = IPC_NOWAIT (returns immediately when no message is found in queue or MSG_NOERROR (truncates message text, if more than msgsz bytes)
+            msgsnd(msqid, &msq, sizeof(msq) + 1, 0);
+
+            printf("data sent in sec and nano: %s", msq);
+
+            // //exec function to send children to worker
+            // char *args[] = {"worker", sh_key_string, termSec_string, termNano_string, NULL};
+            // execvp("./worker", args);
+
             return 1;
         }
     }   
@@ -246,6 +288,11 @@ int main(int argc, char *argv[]){
     shmdt( shm_ptr ); // Detach from the shared memory segment
     shmctl( shm_id, IPC_RMID, NULL ); // Free shared memory segment shm_id 
 
+    //Removes the message queue immediately
+    if (msgctl(msqid, IPC_RMID, NULL) == -1) {
+            perror("msgctl");
+            return EXIT_FAILURE;
+    }
     return 0;
 }
 
