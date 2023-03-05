@@ -10,10 +10,10 @@ int main(int argc, char *argv[]){
     int checkSec = 0;
     struct PCB secNano;
 
-    //grab sh_key, random second, and random nanosecond from oss
-    int sh_key = atoi(argv[1]);
-    int sec = atoi(argv[2]);
-    int nano = atoi(argv[3]);
+    // //grab sh_key, random second, and random nanosecond from oss
+    // int sh_key = atoi(argv[1]);
+    // int sec = atoi(argv[2]);
+    // int nano = atoi(argv[3]);
 
     //Grab same key oss.c grabbed for message queue
     key_t msgkey;
