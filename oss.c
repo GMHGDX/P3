@@ -17,8 +17,6 @@
 #include <sys/msg.h> //message queues
 #include "oss.h"
 
-#define PERMS 0644
-
 void printTable();
 
 struct msgqueue {

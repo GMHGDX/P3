@@ -2,6 +2,7 @@
 #include <unistd.h> //for pid_t and exec
 
 #define BILLION 1000000000L
+#define PERMS 0644
 
 struct PCB {
 int occupied; // either true or false
