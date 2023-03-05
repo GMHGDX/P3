@@ -61,8 +61,8 @@ int main(int argc, char *argv[]){
     readFromMem = *shm_ptr;
 
     //Figure out when to terminate
-    termTimeS = readFromMem.sec + secNano;
-    termTimeNano = readFromMem.nano + secNano;
+    termTimeS = readFromMem.sec + secNano.sec;
+    termTimeNano = readFromMem.nano + secNano.nano;
     double termTogether = termTimeS + termTimeNano/BILLION;
 
 
