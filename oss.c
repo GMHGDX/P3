@@ -275,13 +275,11 @@ int main(int argc, char *argv[]){
             snprintf(sec_string, sizeof(sec_string), "%i", seconds);
             snprintf(nano_string, sizeof(nano_string), "%i", nanoseconds);
 
-            char together;
-            together = sec_string + ' ' + nano_string;
-            // strcpy(together, sec_string);
-            // strcat(together, " ");
-            // strcat(together, nano_string);
-            // snprintf(termSec_string, sizeof(termSec_string), "%i", seconds);
-            // snprintf(termNano_string, sizeof(termNano_string), "%i", nanoseconds);
+            char *together;
+            together = malloc(strlen(sec_string) + strlen(nano_string) + 1 + 1)
+            strcpy(together, sec_string);
+            strcat(together, " ");
+            strcat(together, nano_string);
 
             strcpy(msq.mtext, together);
 
