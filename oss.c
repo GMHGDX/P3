@@ -120,7 +120,7 @@ int main(int argc, char *argv[]){
         exit(1);
     }
 
-    printf("your message key: %i", msqkey);
+    printf("your message key: %i\n", msqkey);
 
     //open an existing message queue or create a new one
     //int mssgget(key_t key, int msgflg)
@@ -260,6 +260,15 @@ int main(int argc, char *argv[]){
             // 4. Send the message.
             // 5. Free mbuf.
 
+
+
+            // //exec function to send children to worker
+            char *args[] = {"worker", sh_key_string, NULL};
+            execvp("./worker", args);
+
+            return 1;
+        }
+        if(childpid != 0 ){ //Parent only code, it will send the message
             char sh_key_string[50];
             char sec_string[50];
             char nano_string[50];
@@ -285,13 +294,7 @@ int main(int argc, char *argv[]){
             // msgflg = IPC_NOWAIT (returns immediately when no message is found in queue or MSG_NOERROR (truncates message text, if more than msgsz bytes)
             msgsnd(msqid, &msq, sizeof(msq), 0);
 
-            printf("data sent in sec and nano: %s , its type is %d", msq.mtext, msq.mtype);
-
-            // //exec function to send children to worker
-            char *args[] = {"worker", sh_key_string, NULL};
-            execvp("./worker", args);
-
-            return 1;
+            printf("data sent in sec and nano: %s , its type is %d\n", msq.mtext, msq.mtype);
         }
     }   
    
