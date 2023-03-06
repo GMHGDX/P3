@@ -254,13 +254,8 @@ int main(int argc, char *argv[]){
     
         //send shared memory key to worker for children to use 
         if (childpid == 0){ 
-            // 1. Allocate a buffer, mbuf, which is of type mymsg_t and size sizeof(mymsg_t) + strlen(mymessage).
-            // 2. Copy mymessage into the mbuf->mtext member.
-            // 3. Set the message type in the mbuf->mtype member.
-            // 4. Send the message.
-            // 5. Free mbuf.
-
-
+            char sh_key_string[50];
+            snprintf(sh_key_string, sizeof(sh_key_string), "%i", sh_key);
 
             // //exec function to send children to worker
             char *args[] = {"worker", sh_key_string, NULL};
@@ -269,11 +264,14 @@ int main(int argc, char *argv[]){
             return 1;
         }
         if(childpid != 0 ){ //Parent only code, it will send the message
-            char sh_key_string[50];
+         // 1. Allocate a buffer, mbuf, which is of type mymsg_t and size sizeof(mymsg_t) + strlen(mymessage).
+            // 2. Copy mymessage into the mbuf->mtext member.
+            // 3. Set the message type in the mbuf->mtype member.
+            // 4. Send the message.
+            // 5. Free mbuf.
             char sec_string[50];
             char nano_string[50];
 
-            snprintf(sh_key_string, sizeof(sh_key_string), "%i", sh_key);
             snprintf(sec_string, sizeof(sec_string), "%i", seconds);
             snprintf(nano_string, sizeof(nano_string), "%i", nanoseconds);
 
