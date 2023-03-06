@@ -2,13 +2,17 @@
 #include <sys/shm.h> //Shared memory
 #include "oss.h"
 
+struct msgqueue {
+    long mtype;
+    char mtext[200];
+}msq;
+
 int main(int argc, char *argv[]){
     int termTimeS;
     int termTimeNano;
     int sysClockS;
     int sysClockNano;
     int checkSec = 0;
-    struct PCB secNano;
 
     // //grab sh_key, random second, and random nanosecond from oss
     int sh_key = atoi(argv[1]);
@@ -39,8 +43,8 @@ int main(int argc, char *argv[]){
         //–ve − Reads the first message of lowest type less than or equal to the absolute value of message type (say, if msgtype is -5, then it reads first message of type less than 5 i.e., message type from 1 to 5)
     //msgflg = IPC_NOWAIT (returns immediately when no message is found in queue or MSG_NOERROR (truncates message text, if more than msgsz bytes)
     //recieve the message
-    msgrcv(msqid, &secNano, sizeof(secNano), 1, 0);
-    printf("Data Received is : %s \n", secNano);
+    msgrcv(msqid, &msq, sizeof(msq), 1, 0);
+    printf("Data Received is : %s \n", msq);
 
     //get shared memory
     int shm_id = shmget(sh_key, sizeof(struct PCB), 0666);
@@ -61,8 +65,8 @@ int main(int argc, char *argv[]){
     readFromMem = *shm_ptr;
 
     //Figure out when to terminate
-    termTimeS = readFromMem.sec + secNano.sec;
-    termTimeNano = readFromMem.nano + secNano.nano;
+    termTimeS = readFromMem.sec + 1;
+    termTimeNano = readFromMem.nano;
     double termTogether = termTimeS + termTimeNano/BILLION;
 
 
@@ -94,7 +98,5 @@ int main(int argc, char *argv[]){
     //print when child has finished loop and terminating
     printf("WORKER PID: %ld PPID: %ld SysClockS: %i SysclockNano: %i TermTimeS: %i TermTimeNano: %i\n --Terminating\n",(long)getpid(), (long)getppid(), sysClockS, sysClockNano, termTimeS, termTimeNano);
 
-    // to destroy the message queue
-    msgctl(msqid, IPC_RMID, NULL);
     return 0;
 }

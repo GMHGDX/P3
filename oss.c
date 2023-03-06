@@ -128,7 +128,7 @@ int main(int argc, char *argv[]){
     //IPC_EXCL (Used with IPC_CREAT to create the message queue and the call fails, if the message queue already exists)
     int msqid;
     if ((msqid = msgget(msqkey, PERMS | IPC_CREAT)) == -1) {
-      perror("msgget");
+      perror("Failed to create new private message queue");
       exit(1);
    }
 
@@ -256,16 +256,34 @@ int main(int argc, char *argv[]){
         if (childpid == 0){ 
              struct PCB secNano;
 
+// 1. Allocate a buffer, mbuf, which is of type mymsg_t and size sizeof(mymsg_t) + strlen(mymessage).
+// 2. Copy mymessage into the mbuf->mtext member.
+// 3. Set the message type in the mbuf->mtype member.
+// 4. Send the message.
+// 5. Free mbuf.
+
+
+sec nano -> text
+2      4 - > "2 4"
+
             // char termSec_string[50];
             // char termNano_string[50];
             char sh_key_string[50];
+            char sec_string[50];
+            char nano_string[50];
 
             snprintf(sh_key_string, sizeof(sh_key_string), "%i", sh_key);
+            snprintf(sec_string, sizeof(sec_string), "%i", seconds);
+            snprintf(nano_string, sizeof(nano_string), "%i", nanoseconds);
+
+            char together;
+            strcpy(together, sec_string);
+            strcat(together, " ");
+            strcat(together, nano_string);
             // snprintf(termSec_string, sizeof(termSec_string), "%i", seconds);
             // snprintf(termNano_string, sizeof(termNano_string), "%i", nanoseconds);
 
-            secNano.sec;
-            secNano.nano;
+            strcpy(msq.mtext, together);
 
             // Write or append message into message queue
             // int msgsnd(int msgid, const void *msgp, size_t msgsz, int msgflg)
@@ -273,7 +291,7 @@ int main(int argc, char *argv[]){
             // msgp = pointer to the message sent to the caller
             // msgsz = size of message (positive. zero if left empty)
             // msgflg = IPC_NOWAIT (returns immediately when no message is found in queue or MSG_NOERROR (truncates message text, if more than msgsz bytes)
-            msgsnd(msqid, &secNano, sizeof(secNano) + 1, 0);
+            msgsnd(msqid, &msq, sizeof(together), 0);
 
             printf("data sent in sec and nano: %s", msq);
 
