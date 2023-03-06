@@ -276,9 +276,10 @@ int main(int argc, char *argv[]){
             snprintf(nano_string, sizeof(nano_string), "%i", nanoseconds);
 
             char together;
-            strcpy(together, sec_string);
-            strcat(together, " ");
-            strcat(together, nano_string);
+            together = sec_string + ' ' + nano_string;
+            // strcpy(together, sec_string);
+            // strcat(together, " ");
+            // strcat(together, nano_string);
             // snprintf(termSec_string, sizeof(termSec_string), "%i", seconds);
             // snprintf(termNano_string, sizeof(termNano_string), "%i", nanoseconds);
 
