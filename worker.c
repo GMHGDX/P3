@@ -24,7 +24,7 @@ int main(int argc, char *argv[]){
 
     //Grab same key oss.c grabbed for message queue
     key_t msgkey;
-    if((msgkey = ftok("msgkey.txt", 'a')) == (key_t) -1){
+    if((msgkey = ftok("oss.h", 'a')) == (key_t) -1){
         perror("IPC error: ftok");
         exit(1);
     }

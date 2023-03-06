@@ -115,7 +115,7 @@ int main(int argc, char *argv[]){
 
     //Create key using ftok()
     key_t msqkey;
-    if((msqkey = ftok("msqkey.txt", 'a')) == (key_t) -1){
+    if((msqkey = ftok("oss.h", 'a')) == (key_t) -1){
         perror("IPC error: ftok");
         exit(1);
     }
