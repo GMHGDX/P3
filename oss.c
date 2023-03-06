@@ -250,6 +250,39 @@ int main(int argc, char *argv[]){
 
             childrenToLaunch++;
             currentChildren++;
+
+            if(childpid != 0 ){ //Parent only code, it will send the message
+                // 1. Allocate a buffer, mbuf, which is of type mymsg_t and size sizeof(mymsg_t) + strlen(mymessage).
+                // 2. Copy mymessage into the mbuf->mtext member.
+                // 3. Set the message type in the mbuf->mtype member.
+                // 4. Send the message.
+                // 5. Free mbuf.
+
+                msq.mtype = 1;
+                char sec_string[50];
+                char nano_string[50];
+
+                snprintf(sec_string, sizeof(sec_string), "%i", seconds);
+                snprintf(nano_string, sizeof(nano_string), "%i", nanoseconds);
+
+                char *together;
+                together = malloc(strlen(sec_string) + strlen(nano_string) + 1 + 1);
+                strcpy(together, sec_string);
+                strcat(together, " ");
+                strcat(together, nano_string);
+
+                strcpy(msq.mtext, together);
+
+                // Write or append message into message queue
+                // int msgsnd(int msgid, const void *msgp, size_t msgsz, int msgflg)
+                // msgid = message queue identifier
+                // msgp = pointer to the message sent to the caller
+                // msgsz = size of message (positive. zero if left empty)
+                // msgflg = IPC_NOWAIT (returns immediately when no message is found in queue or MSG_NOERROR (truncates message text, if more than msgsz bytes)
+                msgsnd(msqid, &msq, sizeof(msq), 0);
+
+                printf("data sent in sec and nano: %s , its type is %d\n", msq.mtext, msq.mtype);
+            }
         }
     
         //send shared memory key to worker for children to use 
@@ -262,36 +295,6 @@ int main(int argc, char *argv[]){
             execvp("./worker", args);
 
             return 1;
-        }
-        if(childpid != 0 ){ //Parent only code, it will send the message
-         // 1. Allocate a buffer, mbuf, which is of type mymsg_t and size sizeof(mymsg_t) + strlen(mymessage).
-            // 2. Copy mymessage into the mbuf->mtext member.
-            // 3. Set the message type in the mbuf->mtype member.
-            // 4. Send the message.
-            // 5. Free mbuf.
-            char sec_string[50];
-            char nano_string[50];
-
-            snprintf(sec_string, sizeof(sec_string), "%i", seconds);
-            snprintf(nano_string, sizeof(nano_string), "%i", nanoseconds);
-
-            char *together;
-            together = malloc(strlen(sec_string) + strlen(nano_string) + 1 + 1);
-            strcpy(together, sec_string);
-            strcat(together, " ");
-            strcat(together, nano_string);
-
-            strcpy(msq.mtext, together);
-
-            // Write or append message into message queue
-            // int msgsnd(int msgid, const void *msgp, size_t msgsz, int msgflg)
-            // msgid = message queue identifier
-            // msgp = pointer to the message sent to the caller
-            // msgsz = size of message (positive. zero if left empty)
-            // msgflg = IPC_NOWAIT (returns immediately when no message is found in queue or MSG_NOERROR (truncates message text, if more than msgsz bytes)
-            msgsnd(msqid, &msq, sizeof(msq), 0);
-
-            printf("data sent in sec and nano: %s , its type is %d\n", msq.mtext, msq.mtype);
         }
     }   
    
