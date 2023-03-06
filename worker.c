@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <sys/shm.h> //Shared memory
+#include <sys/msg.h> //message queues
 #include "oss.h"
 
 struct msgqueue {
