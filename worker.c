@@ -44,7 +44,7 @@ int main(int argc, char *argv[]){
     //msgflg = IPC_NOWAIT (returns immediately when no message is found in queue or MSG_NOERROR (truncates message text, if more than msgsz bytes)
     //recieve the message
     msgrcv(msqid, &msq, sizeof(msq), 1, 0);
-    printf("Data Received is : %s \n", msq);
+    printf("Data Received is : %s \n", msq.mtext);
 
     //get shared memory
     int shm_id = shmget(sh_key, sizeof(struct PCB), 0666);

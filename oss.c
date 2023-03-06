@@ -254,20 +254,12 @@ int main(int argc, char *argv[]){
     
         //send shared memory key to worker for children to use 
         if (childpid == 0){ 
-             struct PCB secNano;
+            // 1. Allocate a buffer, mbuf, which is of type mymsg_t and size sizeof(mymsg_t) + strlen(mymessage).
+            // 2. Copy mymessage into the mbuf->mtext member.
+            // 3. Set the message type in the mbuf->mtype member.
+            // 4. Send the message.
+            // 5. Free mbuf.
 
-// 1. Allocate a buffer, mbuf, which is of type mymsg_t and size sizeof(mymsg_t) + strlen(mymessage).
-// 2. Copy mymessage into the mbuf->mtext member.
-// 3. Set the message type in the mbuf->mtype member.
-// 4. Send the message.
-// 5. Free mbuf.
-
-
-sec nano -> text
-2      4 - > "2 4"
-
-            // char termSec_string[50];
-            // char termNano_string[50];
             char sh_key_string[50];
             char sec_string[50];
             char nano_string[50];
@@ -291,9 +283,9 @@ sec nano -> text
             // msgp = pointer to the message sent to the caller
             // msgsz = size of message (positive. zero if left empty)
             // msgflg = IPC_NOWAIT (returns immediately when no message is found in queue or MSG_NOERROR (truncates message text, if more than msgsz bytes)
-            msgsnd(msqid, &msq, sizeof(together), 0);
+            msgsnd(msqid, &msq, sizeof(msq), 0);
 
-            printf("data sent in sec and nano: %s", msq);
+            printf("data sent in sec and nano: %s , its type is %d", msq.mtext, msq.mtype);
 
             // //exec function to send children to worker
             char *args[] = {"worker", sh_key_string, NULL};
