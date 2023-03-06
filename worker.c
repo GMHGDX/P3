@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h> //remedy exit warning
+#include <stdlib.h> //EXIT_FAILURE
 #include <sys/shm.h> //Shared memory
 #include <sys/msg.h> //message queues
 #include "oss.h"
