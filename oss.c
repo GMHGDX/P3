@@ -276,7 +276,7 @@ int main(int argc, char *argv[]){
             snprintf(nano_string, sizeof(nano_string), "%i", nanoseconds);
 
             char *together;
-            together = malloc(strlen(sec_string) + strlen(nano_string) + 1 + 1)
+            together = malloc(strlen(sec_string) + strlen(nano_string) + 1 + 1);
             strcpy(together, sec_string);
             strcat(together, " ");
             strcat(together, nano_string);
