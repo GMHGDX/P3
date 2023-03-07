@@ -40,23 +40,23 @@ int main(int argc, char *argv[]){
 
    // Extract the first token
    int seperate = 0;
-   char sec;
-   char nanosec;
+   int sec;
+   int nanosec;
 
    char * text = strtok(msq.mtext, " ");
     while( text != NULL ) {
         seperate++;
         if(seperate == 1){
-            sec = text; //printing each token
+            sec = atoi(text); //printing each token
             text = strtok(NULL, " ");
         }
          if(seperate == 2){
-            nanosec = text; //printing each token
+            nanosec = atoi(text); //printing each token
             text = strtok(NULL, " ");
             break;
          }
    }
-   printf("seconds: %s nanoseconds: %s \n", sec, nanosec);
+   printf("seconds: %i nanoseconds: %i \n", sec, nanosec);
 
     //get shared memory
     int shm_id = shmget(sh_key, sizeof(struct PCB), 0666);
