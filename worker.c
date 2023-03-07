@@ -40,8 +40,8 @@ int main(int argc, char *argv[]){
 
    // Extract the first token
    int seperate = 0;
-   int sec;
-   int nanosec;
+   char sec;
+   char nanosec;
 
    char * text = strtok(msq.mtext, " ");
     while( text != NULL ) {
@@ -56,7 +56,7 @@ int main(int argc, char *argv[]){
             break;
          }
    }
-   printf("seconds: %i nanoseconds: %i \n", sec, nanosec);
+   printf("seconds: %s nanoseconds: %s \n", sec, nanosec);
 
     //get shared memory
     int shm_id = shmget(sh_key, sizeof(struct PCB), 0666);
