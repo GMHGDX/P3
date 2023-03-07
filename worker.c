@@ -17,10 +17,8 @@ int main(int argc, char *argv[]){
     int sysClockNano;
     int checkSec = 0;
 
-    // //grab sh_key, random second, and random nanosecond from oss
+    // //grab sh_key from oss for shared memory
     int sh_key = atoi(argv[1]);
-    // int sec = atoi(argv[2]);
-    // int nano = atoi(argv[3]);
 
     //Grab same key oss.c grabbed for message queue
     key_t msgkey;
@@ -36,18 +34,29 @@ int main(int argc, char *argv[]){
       exit(1);
    }
 
-    //int msgrcv(int msgid, const void *msgp, size_t msgsz, long msgtype, int msgflg)
-    //msgid = recognized message queue
-    //msgp = pointer to the message recieved the caller
-    //msgsz = size of message recieved (ending w/ null character)
-    //msgtype =
-        //0 − Reads the first received message in the queue
-        //+ve − Reads the first message in the queue of type msgtype (if msgtype is 10, then reads only the first message of type 10 even though other types may be in the queue at the beginning)
-        //–ve − Reads the first message of lowest type less than or equal to the absolute value of message type (say, if msgtype is -5, then it reads first message of type less than 5 i.e., message type from 1 to 5)
-    //msgflg = IPC_NOWAIT (returns immediately when no message is found in queue or MSG_NOERROR (truncates message text, if more than msgsz bytes)
     //recieve the message
     msgrcv(msqid, &msq, sizeof(msq), 1, 0);
     printf("Data Received is : %s \n", msq.mtext);
+
+   // Extract the first token
+   int seperate = 0;
+   int sec;
+   int nanosec;
+
+   char * text = strtok(msq.mtext, " ");
+    while( text != NULL ) {
+        seperate++;
+        if(seperate == 1){
+            sec = text; //printing each token
+            text = strtok(NULL, " ");
+        }
+         if(seperate == 2){
+            nanosec = text; //printing each token
+            text = strtok(NULL, " ");
+            break;
+         }
+   }
+   printf("seconds: %s nanoseconds: \n", sec, nanosec);
 
     //get shared memory
     int shm_id = shmget(sh_key, sizeof(struct PCB), 0666);

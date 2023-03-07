@@ -258,27 +258,26 @@ int main(int argc, char *argv[]){
                 // 4. Send the message.
                 // 5. Free mbuf.
 
+                //initialize mtype to 1
                 msq.mtype = 1;
                 char sec_string[50];
                 char nano_string[50];
 
+                //convert integer to char string
                 snprintf(sec_string, sizeof(sec_string), "%i", seconds);
                 snprintf(nano_string, sizeof(nano_string), "%i", nanoseconds);
 
+                //add seconds and nanoseconds together with a space in between to send as one message
                 char *together;
                 together = malloc(strlen(sec_string) + strlen(nano_string) + 1 + 1);
                 strcpy(together, sec_string);
                 strcat(together, " ");
                 strcat(together, nano_string);
 
+                //copy our new string into mtext
                 strcpy(msq.mtext, together);
 
-                // Write or append message into message queue
-                // int msgsnd(int msgid, const void *msgp, size_t msgsz, int msgflg)
-                // msgid = message queue identifier
-                // msgp = pointer to the message sent to the caller
-                // msgsz = size of message (positive. zero if left empty)
-                // msgflg = IPC_NOWAIT (returns immediately when no message is found in queue or MSG_NOERROR (truncates message text, if more than msgsz bytes)
+                //send our string to message queue
                 msgsnd(msqid, &msq, sizeof(msq), 0);
 
                 printf("data sent in sec and nano: %s , its type is %d\n", msq.mtext, msq.mtype);
