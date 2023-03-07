@@ -38,24 +38,25 @@ int main(int argc, char *argv[]){
     msgrcv(msqid, &msq, sizeof(msq), 1, 0);
     printf("Data Received is : %s \n", msq.mtext);
 
-   // Extract the first token
-   int seperate = 0;
-   int sec;
-   int nanosec;
+    // initialization for string loop
+    int seperate = 0;
+    int sec;
+    int nanosec;
 
-   char * text = strtok(msq.mtext, " ");
-    while( text != NULL ) {
-        seperate++;
-        if(seperate == 1){
-            sec = atoi(text); //printing each token
-            text = strtok(NULL, " ");
-        }
-         if(seperate == 2){
-            nanosec = atoi(text); //printing each token
-            text = strtok(NULL, " ");
-            break;
-         }
-   }
+    //seperate the message by white space and assign it to seconds and nanoseconds
+    char * text = strtok(msq.mtext, " ");
+        while( text != NULL ) {
+            seperate++;
+            if(seperate == 1){
+                sec = atoi(text); //assign second as an integer
+                text = strtok(NULL, " ");
+            }
+            if(seperate == 2){
+                nanosec = atoi(text); //assign nanosecond as an integer
+                text = strtok(NULL, " ");
+                break;
+            }
+    }
    printf("seconds: %i nanoseconds: %i \n", sec, nanosec);
 
     //get shared memory
@@ -77,8 +78,8 @@ int main(int argc, char *argv[]){
     readFromMem = *shm_ptr;
 
     //Figure out when to terminate
-    termTimeS = readFromMem.sec + 1;
-    termTimeNano = readFromMem.nano;
+    termTimeS = readFromMem.sec + sec;
+    termTimeNano = readFromMem.nano + nanosec;
     double termTogether = termTimeS + termTimeNano/BILLION;
 
 
