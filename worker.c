@@ -56,7 +56,7 @@ int main(int argc, char *argv[]){
             break;
          }
    }
-   printf("seconds: %s nanoseconds: %s \n", sec, nanosec);
+   printf("seconds: %i nanoseconds: %i \n", sec, nanosec);
 
     //get shared memory
     int shm_id = shmget(sh_key, sizeof(struct PCB), 0666);
