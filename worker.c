@@ -101,8 +101,8 @@ int main(int argc, char *argv[]){
 if(sysClockS > termTimeS){
         //currentTime = (double)(sysClockS) + (double)(sysClockNano/BILLION);
 
-        if(sysClockNano > termTimeNano){
-            if(sysClockS > termTimeS){
+        if(sysClockNano >= termTimeNano){
+            if(sysClockS >= termTimeS){
                 break;
             }   
         }
