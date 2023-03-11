@@ -84,6 +84,9 @@ int main(int argc, char *argv[]){
 
     double termTogether = (double)(termTimeS) + (double)(termTimeNano/BILLION);
 
+//testingggggggggggggg
+    double testNano = (double)(termTimeNano/BILLION);
+
 
     sysClockS = readFromMem.sec;
     sysClockNano = readFromMem.nano;
@@ -101,6 +104,8 @@ int main(int argc, char *argv[]){
         sysClockNano = readFromMem.nano;
 
         currentTime = (double)(sysClockS) + (double)(sysClockNano/BILLION);
+//testinggggggggggggg
+        double sysClockk = (double)(sysClockNano/BILLION);
 
         if(currentTime > termTogether){
             break;
@@ -109,6 +114,8 @@ int main(int argc, char *argv[]){
             printf("WORKER PID: %ld PPID: %ld SysClockS: %i SysclockNano: %i TermTimeS: %i TermTimeNano: %i\n --%i seconds has passed\n",(long)getpid(), (long)getppid(), sysClockS, sysClockNano, termTimeS, termTimeNano, checkSec);
             printf("\ncurrentTime: %f\n", currentTime);
             printf("\ntermTogether: %f\n", termTogether);
+            printf("\nTesting nanosecond input: %f\n", testNano);
+            printf("\nTesting sysClockNano input: %f\n", sysClockk);
             checkSec++;
         }
     }
