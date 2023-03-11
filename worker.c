@@ -89,8 +89,6 @@ int main(int argc, char *argv[]){
 
     checkSec = sysClockS;
 
-    double currentTime;
-
     printf("WORKER PID: %ld PPID: %ld Received message from oss: SysClockS: %i SysclockNano: %i TermTimeS: %i TermTimeNano: %i\n--Received message\n",(long)getpid(), (long)getppid(), sysClockS, sysClockNano, termTimeS, termTimeNano);
 
     //loop child until termination time is passed 
