@@ -91,6 +91,8 @@ int main(int argc, char *argv[]){
     sysClockS = readFromMem.sec;
     sysClockNano = readFromMem.nano;
 
+    printf("SYSCLOCKNANOOOOOOOOOOO: %lf", sysClockNano);
+
     checkSec = sysClockS;
 
     double currentTime;
