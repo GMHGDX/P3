@@ -114,8 +114,8 @@ int main(int argc, char *argv[]){
             printf("WORKER PID: %ld PPID: %ld SysClockS: %i SysclockNano: %i TermTimeS: %i TermTimeNano: %i\n --%i seconds has passed\n",(long)getpid(), (long)getppid(), sysClockS, sysClockNano, termTimeS, termTimeNano, checkSec);
             printf("\ncurrentTime: %f\n", currentTime);
             printf("\ntermTogether: %f\n", termTogether);
-            printf("\nTesting nanosecond input: %f\n", testNano);
-            printf("\nTesting sysClockNano input: %f\n", sysClockk);
+            printf("\nTesting nanosecond input: %lf\n", testNano);
+            printf("\nTesting sysClockNano input: %lf\n", sysClockk);
             checkSec++;
         }
     }
