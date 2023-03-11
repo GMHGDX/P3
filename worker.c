@@ -82,7 +82,7 @@ int main(int argc, char *argv[]){
     termTimeNano = readFromMem.nano + nanosec;
 
 
-    double termTogether = (double)(termTimeS + termTimeNano/BILLION);
+    double termTogether = (double)(termTimeS) + (double)(termTimeNano/BILLION);
 
 
     sysClockS = readFromMem.sec;
@@ -100,7 +100,7 @@ int main(int argc, char *argv[]){
         sysClockS = readFromMem.sec;
         sysClockNano = readFromMem.nano;
 
-        currentTime = (double)(sysClockS + sysClockNano/BILLION);
+        currentTime = (double)(sysClockS) + (double)(sysClockNano/BILLION);
 
         if(currentTime > termTogether){
             break;
