@@ -81,12 +81,11 @@ int main(int argc, char *argv[]){
     termTimeS = readFromMem.sec + sec;
     termTimeNano = readFromMem.nano + nanosec;
 
-
-   // double termTogether = (double)(termTimeS) + (double)(termTimeNano/BILLION);
-
+    //Read time from memory
     sysClockS = readFromMem.sec;
     sysClockNano = readFromMem.nano;
 
+    //for printing every second in the loop for each child that starts at different times
     checkSec = sysClockS;
 
     printf("WORKER PID: %ld PPID: %ld Received message from oss: SysClockS: %i SysclockNano: %i TermTimeS: %i TermTimeNano: %i\n--Received message\n",(long)getpid(), (long)getppid(), sysClockS, sysClockNano, termTimeS, termTimeNano);
@@ -97,14 +96,11 @@ int main(int argc, char *argv[]){
         sysClockS = readFromMem.sec;
         sysClockNano = readFromMem.nano;
 
-        //currentTime = (double)(sysClockS) + (double)(sysClockNano/BILLION);
-
+        //to terminate at the 
         if(sysClockS > termTimeS || (sysClockS == termTimeS && sysClockNano > termTimeNano)){
-                    break;
+            break;
         }
-        // if(currentTime > termTogether){
-        //     break;
-        // }
+        //printins out every second
         if(checkSec == sysClockS){
             printf("WORKER PID: %ld PPID: %ld SysClockS: %i SysclockNano: %i TermTimeS: %i TermTimeNano: %i\n --%i seconds has passed\n",(long)getpid(), (long)getppid(), sysClockS, sysClockNano, termTimeS, termTimeNano, checkSec);
             checkSec++;
