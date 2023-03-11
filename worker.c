@@ -85,7 +85,7 @@ int main(int argc, char *argv[]){
     double termTogether = (double)(termTimeS) + (double)(termTimeNano/BILLION);
 
 //testingggggggggggggg
-    double testNano = (1.0)(termTimeNano/BILLION);
+    double testNano = (1.0)*(termTimeNano/BILLION);
 
 
     sysClockS = readFromMem.sec;
