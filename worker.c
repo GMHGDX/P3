@@ -57,7 +57,7 @@ int main(int argc, char *argv[]){
                 break;
             }
     }
-   printf("seconds: %i nanoseconds: %i \n", sec, nanosec);
+    printf("seconds: %i nanoseconds: %i \n", sec, nanosec);
 
     //get shared memory
     int shm_id = shmget(sh_key, sizeof(struct PCB), 0666);
@@ -82,11 +82,7 @@ int main(int argc, char *argv[]){
     termTimeNano = readFromMem.nano + nanosec;
 
 
-    double termTogether = (double)(termTimeS) + (double)(termTimeNano/BILLION);
-
-//testingggggggggggggg
-    double testNano = (1.0)*(termTimeNano/BILLION);
-
+   // double termTogether = (double)(termTimeS) + (double)(termTimeNano/BILLION);
 
     sysClockS = readFromMem.sec;
     sysClockNano = readFromMem.nano;
@@ -102,20 +98,19 @@ int main(int argc, char *argv[]){
         readFromMem = *shm_ptr;
         sysClockS = readFromMem.sec;
         sysClockNano = readFromMem.nano;
+if(sysClockS > termTimeS){
+        //currentTime = (double)(sysClockS) + (double)(sysClockNano/BILLION);
 
-        currentTime = (double)(sysClockS) + (double)(sysClockNano/BILLION);
-//testinggggggggggggg
-        double sysClockk = 1.0 * sysClockNano/BILLION;
-
-        if(currentTime > termTogether){
-            break;
+        if(sysClockNano > termTimeNano){
+            if(sysClockS > termTimeS){
+                break;
+            }   
         }
+        // if(currentTime > termTogether){
+        //     break;
+        // }
         if(checkSec == sysClockS){
             printf("WORKER PID: %ld PPID: %ld SysClockS: %i SysclockNano: %i TermTimeS: %i TermTimeNano: %i\n --%i seconds has passed\n",(long)getpid(), (long)getppid(), sysClockS, sysClockNano, termTimeS, termTimeNano, checkSec);
-            printf("\ncurrentTime: %f\n", currentTime);
-            printf("\ntermTogether: %f\n", termTogether);
-            printf("\nTesting nanosecond input: %lf\n", testNano);
-            printf("\nTesting sysClockNano input: %lf\n", sysClockk);
             checkSec++;
         }
     }
