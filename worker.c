@@ -91,8 +91,6 @@ int main(int argc, char *argv[]){
     sysClockS = readFromMem.sec;
     sysClockNano = readFromMem.nano;
 
-    printf("SYSCLOCKNANOOOOOOOOOOO: %i", sysClockNano);
-
     checkSec = sysClockS;
 
     double currentTime;
@@ -107,7 +105,7 @@ int main(int argc, char *argv[]){
 
         currentTime = (double)(sysClockS) + (double)(sysClockNano/BILLION);
 //testinggggggggggggg
-        double sysClockk = (double)(sysClockNano/BILLION);
+        double sysClockk = sysClockNano/BILLION;
 
         if(currentTime > termTogether){
             break;
