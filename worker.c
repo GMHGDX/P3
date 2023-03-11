@@ -105,7 +105,7 @@ int main(int argc, char *argv[]){
 
         currentTime = (double)(sysClockS) + (double)(sysClockNano/BILLION);
 //testinggggggggggggg
-        double sysClockk = sysClockNano/BILLION;
+        double sysClockk = 1.0 * sysClockNano/BILLION;
 
         if(currentTime > termTogether){
             break;
