@@ -98,7 +98,7 @@ int main(int argc, char *argv[]){
         readFromMem = *shm_ptr;
         sysClockS = readFromMem.sec;
         sysClockNano = readFromMem.nano;
-if(sysClockS > termTimeS){
+
         //currentTime = (double)(sysClockS) + (double)(sysClockNano/BILLION);
 
         if(sysClockNano >= termTimeNano){
