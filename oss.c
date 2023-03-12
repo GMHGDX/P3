@@ -222,16 +222,27 @@ int main(int argc, char *argv[]){
         if(currentTime > (lastPrintTime + 0.5) || lastPrintTime == 0){
             lastPrintTime = currentTime;
 
+            printf("OSS PID: %ld SysClockS: %f SysclockNano: %f\n", (long)getpid(), sec, nano);
             fprintf(fileLogging, "OSS PID: %ld SysClockS: %f SysclockNano: %f\n", (long)getpid(), sec, nano);
+            
+
+            printf("Process Table:\n");
             fprintf(fileLogging, "Process Table:\n");
+
             printTable(fileLogging);
+
+            printf("\n\n");
             fprintf(fileLogging, "\n\n");
         }
 
         //Check if all children have been created, check if all children have finished or if time has surpassed 60 seconds
-        if(((childrenToLaunch >= proc) && (allChildrenHaveFinished)) || currentTime >= 60){    
+        if(((childrenToLaunch >= proc) && (allChildrenHaveFinished)) || currentTime >= 60){  
+            printf("OSS PID: %ld SysClockS: %f SysclockNano: %f\n", (long)getpid(), sec, nano);  
             fprintf(fileLogging, "OSS PID: %ld SysClockS: %f SysclockNano: %f\n", (long)getpid(), sec, nano);
+
+            printf("Process Table:\n");
             fprintf(fileLogging, "Process Table:\n");
+
             printTable(fileLogging);
             break; //program can end, all child processes are done
         }
@@ -322,12 +333,16 @@ int main(int argc, char *argv[]){
 
 //Print the process table
 void printTable(FILE* fileLogging){
+    printf("Entry\tOccupied\tPID\t\tStartS\t\tStartN\n");
     fprintf(fileLogging, "Entry\tOccupied\tPID\t\tStartS\t\tStartN\n");
+    
     int i;
     for(i=0;i<20;i++){
         if(processTable[i].pid == 0 ){
             break;
         }
-        fprintf(fileLogging, "%i\t%d\t\t%ld\t\t%f\t%f\n", i, processTable[i].occupied, (long)processTable[i].pid, processTable[i].sec, processTable[i].nano);
+        
+        printf("%i\t%d\t\t%ld\t\t%f\t%f\n", i, processTable[i].occupied, (long)processTable[i].pid, processTable[i].sec, processTable[i].nano);
+        fprintf(fileLogging, "%i\t%d\t\t%ld\t\t%f\t%f\n", i, processTable[i].occupied, (long)processTable[i].pid, processTable[i].sec, processTable[i].nano);     
     }
 }
