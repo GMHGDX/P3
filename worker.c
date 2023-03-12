@@ -5,6 +5,7 @@
 #include <sys/msg.h> //message queues
 #include "oss.h"
 
+//for message queue
 struct msgqueue {
     long mtype;
     char mtext[200];
@@ -36,14 +37,13 @@ int main(int argc, char *argv[]){
 
     //recieve the message
     msgrcv(msqid, &msq, sizeof(msq), 1, 0);
-    printf("Data Received is : %s \n", msq.mtext);
 
     // initialization for string loop
     int seperate = 0;
     int sec;
     int nanosec;
 
-    //seperate the message by white space and assign it to seconds and nanoseconds
+    //seperate the message by white space and assign it to seconds and nanoseconds respectively
     char * text = strtok(msq.mtext, " ");
         while( text != NULL ) {
             seperate++;
@@ -57,7 +57,6 @@ int main(int argc, char *argv[]){
                 break;
             }
     }
-    printf("seconds: %i nanoseconds: %i \n", sec, nanosec);
 
     //get shared memory
     int shm_id = shmget(sh_key, sizeof(struct PCB), 0666);

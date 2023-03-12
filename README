@@ -1,4 +1,31 @@
-This is my sick ass readme 
+Things to note on logfile: 
 
+Logfile does not get any extensions added to it (.txt, .csv, etc.). It just creates a basic file with the name that was given by the user
+If you do not include a logfile name, it will create and write to the file name: 'logfile'
 
-Logfile does not have any extensions added to it. It just creates a basic file with the given name
+---
+
+Additional mentions: 
+
+In this project, I realized the children were not terminating as close to the termination time as they should have (same for the last project). That is fixed now :)
+
+Everything else should work as expected. 
+
+---
+
+How to run project: 
+
+To know how to run the project, run this command: 
+./oss -h 
+
+If you want to skip the sick, cool, awesome, fun, wordy, informative, help command above, run this command below: 
+./oss -s # -n # -t # -f 'string'      <-(# - any integer | 'string' - any name you want for the log file) (These could be arranged in any order)
+
+---
+
+What was done this project (notes for me):
+1) created a project that uses message queues to send to the children in worker 
+2) the message queue sent a random second (within the interval of the users input for -t) and a random nanosecond
+3) worker processed what was in the message queue and deleted it as it was used for the childrens termination time
+4) In addition to this project, a 4th command has been introduced: a logfile 
+5) The user will name the log file and the process table from oss.c will be written to it as well as printed on the screen 

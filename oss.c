@@ -46,7 +46,7 @@ int main(int argc, char *argv[]){
 	int timelimit= 2;
 
     //logfile declaration
-    char* logFile;
+    char* logFile = "logfile";
 
     //variables for our system clock
     struct timespec start, stop;
@@ -73,26 +73,23 @@ int main(int argc, char *argv[]){
                     printf("\t-n = number of total children to launch\n");
                     printf("\t-s = how many children run at the same time\n");
                     printf("\t-t = bound of time that a child process will be launched for (will be picked randomly for sec and nano within given bound)\n\n");   
-                    printf("If you leave out a '-n', '-s', or '-t' in the command line prompt it will defualt to the value 1 for all except  -t, which will be 2\n\n");
+                    printf("\t-f = name of logfile you wish to write the process table in oss.c to\n\n"); 
+                    printf("If you leave out a '-n', '-s', '-t', or '-f' in the command line prompt it will default to the value 1 for -n and -s, the value of 2 for -t, and 'logfile' for -f\n\n");
                     printf("Have fun :)\n\n");
 
                     exit(0);
             break;
         case 'n':
             proc = atoi(optarg);
-			//printf("proc,n: %i \n", proc);
             break;
         case 's':
             simul = atoi(optarg);
-			//printf("simul,s: %i \n", simul);
             break;
         case 't':
             timelimit = atoi(optarg);
-			//printf("timelimit,t: %i \n", timelimit);
             break;
         case 'f':
             logFile = optarg; 
-             printf("%s\n", logFile);
             break;
         default:
             printf ("Invalid option %c \n", optopt);
@@ -122,25 +119,21 @@ int main(int argc, char *argv[]){
     //Create shared memory, key
     const int sh_key = 3147550;
 
-    //Create key using ftok()
+    //Create key using ftok() for more uniqueness
     key_t msqkey;
     if((msqkey = ftok("oss.h", 'a')) == (key_t) -1){
         perror("IPC error: ftok");
         exit(1);
     }
 
-    printf("your message key: %i\n", msqkey);
-
     //open an existing message queue or create a new one
-    //int mssgget(key_t key, int msgflg)
-    //msgflag = IPC_CREAT (creates message queue if none exists)
-    //IPC_EXCL (Used with IPC_CREAT to create the message queue and the call fails, if the message queue already exists)
     int msqid;
     if ((msqid = msgget(msqkey, PERMS | IPC_CREAT)) == -1) {
       perror("Failed to create new private message queue");
       exit(1);
    }
 
+    //create shared memory
     int shm_id = shmget(sh_key, sizeof(struct PCB), IPC_CREAT | 0666);
     if(shm_id <= 0) {
         fprintf(stderr,"ERROR: Failed to get shared memory, shared memory id = %i\n", shm_id);
@@ -171,10 +164,9 @@ int main(int argc, char *argv[]){
 
     double currentTime, lastPrintTime=0;
     
-    //Loop to check for terminated children
+    //Loop to handle our children processes and print the process table
     while(1) {
         if (childpid != 0){
-            //return_pid = waitpid(childpid, &status, WNOHANG); /* WNOHANG def'd in wait.h */
             return_pid = waitpid(-1, &status, WNOHANG);
             if (return_pid == -1) {
                 perror("Failed to fork");
@@ -182,7 +174,7 @@ int main(int argc, char *argv[]){
             } else if (return_pid == 0) {
                 //Child is still running, do nothing
             } else if (return_pid > 0) {
-                //Child(ren) have finished, start new chilren if needed, exit program if all chlriren have finished
+                //Child(ren) have finished, start new chilren if needed, exit program if all children have finished
                 currentChildren--;
                 for(i = 0; i < 20; i++){
                     if(processTable[i].pid == return_pid){
@@ -215,9 +207,10 @@ int main(int argc, char *argv[]){
             nano = (double)( stop.tv_nsec - start.tv_nsec) + ((double)(1)*BILLION);
         }
 
+        //combine seconds and nanoseconds as one decimal
         currentTime = sec + nano/BILLION;
 
-        //Print the table ever half a second
+        //Print the table every half a second and write the same information to log file
         if(currentTime > (lastPrintTime + 0.5) || lastPrintTime == 0){
             lastPrintTime = currentTime;
 
@@ -234,7 +227,7 @@ int main(int argc, char *argv[]){
             fprintf(fileLogging, "\n\n");
         }
 
-        //Check if all children have been created, check if all children have finished or if time has surpassed 60 seconds
+        //Check if all children have been created and all children have finished, or check if time has surpassed 60 seconds. Print and log it if true
         if(((childrenToLaunch >= proc) && (allChildrenHaveFinished)) || currentTime >= 60){  
             printf("OSS PID: %ld SysClockS: %f SysclockNano: %f\n", (long)getpid(), sec, nano);  
             fprintf(fileLogging, "OSS PID: %ld SysClockS: %f SysclockNano: %f\n", (long)getpid(), sec, nano);
@@ -271,13 +264,7 @@ int main(int argc, char *argv[]){
             childrenToLaunch++;
             currentChildren++;
 
-            if(childpid != 0 ){ //Parent only code, it will send the message
-                // 1. Allocate a buffer, mbuf, which is of type mymsg_t and size sizeof(mymsg_t) + strlen(mymessage).
-                // 2. Copy mymessage into the mbuf->mtext member.
-                // 3. Set the message type in the mbuf->mtype member.
-                // 4. Send the message.
-                // 5. Free mbuf.
-
+            if(childpid != 0 ){ 
                 //initialize mtype to 1
                 msq.mtype = 1;
                 char sec_string[50];
@@ -299,8 +286,6 @@ int main(int argc, char *argv[]){
 
                 //send our string to message queue
                 msgsnd(msqid, &msq, sizeof(msq), 0);
-
-                printf("data sent in sec and nano: %s , its type is %d\n", msq.mtext, msq.mtype);
             }
         }
     
@@ -309,15 +294,15 @@ int main(int argc, char *argv[]){
             char sh_key_string[50];
             snprintf(sh_key_string, sizeof(sh_key_string), "%i", sh_key);
 
-            // //exec function to send children to worker
             char *args[] = {"worker", sh_key_string, NULL};
+            //exec function to send children to worker alonk with our shared memeory key
             execvp("./worker", args);
 
             return 1;
         }
     }   
    
-    printf("deleting memory");
+    ///printf("deleting memory");
     shmdt( shm_ptr ); // Detach from the shared memory segment
     shmctl( shm_id, IPC_RMID, NULL ); // Free shared memory segment shm_id 
 
@@ -326,6 +311,8 @@ int main(int argc, char *argv[]){
             perror("msgctl");
             return EXIT_FAILURE;
     }
+
+    //close the log file
     fclose(fileLogging);
     return 0;
 }
