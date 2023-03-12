@@ -96,7 +96,7 @@ int main(int argc, char *argv[]){
         sysClockS = readFromMem.sec;
         sysClockNano = readFromMem.nano;
 
-        //to terminate at the 
+        //to terminate at the right time
         if(sysClockS > termTimeS || (sysClockS == termTimeS && sysClockNano > termTimeNano)){
             break;
         }

@@ -68,7 +68,7 @@ int main(int argc, char *argv[]){
 
     //Parse through command line options
 	char opt;
-    while((opt = getopt(argc, argv, "hn:s:t:")) != -1 )
+    while((opt = getopt(argc, argv, "hn:s:t:f:")) != -1 )
     {
         switch (opt)
         {
