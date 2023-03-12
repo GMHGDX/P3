@@ -94,8 +94,29 @@ int main(int argc, char *argv[]){
 			//printf("timelimit,t: %i \n", timelimit);
             break;
         case 'f':
-            char* logFile = argv[0];
-            printf("FILEEEEEEEEEE: %s", logFile); //open up the logs that are being printed to
+            int i;
+            int strsize = 0;
+            for (i=1; i<argc; i++) {
+                strsize += strlen(argv[i]);
+                if (argc > i+1)
+                    strsize++;
+            }
+            printf("strsize: %d\n", strsize);
+
+            char *cmdstring;
+            cmdstring = malloc(strsize);
+            cmdstring[0] = '\0';
+
+            for (i=1; i<argc; i++) {
+                strcat(cmdstring, argv[i]);
+                if (argc > i+1)
+                    strcat(cmdstring, " ");
+            }
+
+            printf("cmdstring: %s\n", cmdstring);
+
+            // char logFile[50];
+            // snprintf(logFile, sizeof(logFile), "%i", sh_key);//open up the logs that are being printed to
 			//printf("timelimit,t: %i \n", timelimit);
             break;
         default:
