@@ -17,7 +17,7 @@
 #include <sys/msg.h> //message queues
 #include "oss.h"
 
-void printTable();
+void printTable(fileLogging);
 
 struct msgqueue {
     long mtype;
@@ -66,7 +66,7 @@ int main(int argc, char *argv[]){
         processTable[j].pid = 0;
         processTable[j].occupied = 0;
     }
-    printTable();
+    printTable(fileLogging);
 
     //Parse through command line options
 	char opt;
@@ -221,17 +221,17 @@ int main(int argc, char *argv[]){
         if(currentTime > (lastPrintTime + 0.5) || lastPrintTime == 0){
             lastPrintTime = currentTime;
 
-            fprintf("OSS PID: %ld SysClockS: %f SysclockNano: %f\n", (long)getpid(), sec, nano);
-            fprintf("Process Table:\n");
-            printTable();
-            fprintf("\n\n");
+            fprintf(fileLogging, "OSS PID: %ld SysClockS: %f SysclockNano: %f\n", (long)getpid(), sec, nano);
+            fprintf(fileLogging, "Process Table:\n");
+            printTable(fileLogging);
+            fprintf(fileLogging, "\n\n");
         }
 
         //Check if all children have been created, check if all children have finished or if time has surpassed 60 seconds
         if(((childrenToLaunch >= proc) && (allChildrenHaveFinished)) || currentTime >= 60){    
-            fprintf("OSS PID: %ld SysClockS: %f SysclockNano: %f\n", (long)getpid(), sec, nano);
-            fprintf("Process Table:\n");
-            printTable();
+            fprintf(fileLogging, "OSS PID: %ld SysClockS: %f SysclockNano: %f\n", (long)getpid(), sec, nano);
+            fprintf(fileLogging, "Process Table:\n");
+            printTable(fileLogging);
             break; //program can end, all child processes are done
         }
 
@@ -320,8 +320,8 @@ int main(int argc, char *argv[]){
 }
 
 //Print the process table
-void printTable(){
-    printf("Entry\tOccupied\tPID\t\tStartS\t\tStartN\n");
+void printTable(char* fileLogging){
+    fprintf(fileLogging, "Entry\tOccupied\tPID\t\tStartS\t\tStartN\n");
     int i;
     for(i=0;i<20;i++){
         if(processTable[i].pid == 0 ){
