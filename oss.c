@@ -43,6 +43,7 @@ int main(int argc, char *argv[]){
 
 	//bound of time that a child process will be launched for (t)
 	int timelimit= 2;
+    char logFile[50];
 
     //variables for our system clock
     struct timespec start, stop;
@@ -95,13 +96,7 @@ int main(int argc, char *argv[]){
 			//printf("timelimit,t: %i \n", timelimit);
             break;
         case 'f':
-            char strsize[50];
-            scanf("%s", strsize);
-            printf("Your file NAMEEEEEEE: %s", strsize);
-
-            // char logFile[50];
-            // snprintf(logFile, sizeof(logFile), "%i", sh_key);//open up the logs that are being printed to
-			//printf("timelimit,t: %i \n", timelimit);
+            logFile = optarg;
             break;
         default:
             printf ("Invalid option %c \n", optopt);
