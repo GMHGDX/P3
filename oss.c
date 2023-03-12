@@ -94,7 +94,8 @@ int main(int argc, char *argv[]){
 			//printf("timelimit,t: %i \n", timelimit);
             break;
         case 'f':
-            //open up the logs that are being printed to
+            char* logFile = argv[0];
+            printf("FILEEEEEEEEEE: %s", logFile); //open up the logs that are being printed to
 			//printf("timelimit,t: %i \n", timelimit);
             break;
         default:
