@@ -48,6 +48,7 @@ int main(int argc, char *argv[]){
     struct timespec start, stop;
     double sec;
     double nano;
+    int i;
 
     //child process ID
     pid_t childpid = 0;
@@ -94,16 +95,8 @@ int main(int argc, char *argv[]){
 			//printf("timelimit,t: %i \n", timelimit);
             break;
         case 'f':
-            int i;
-            int strsize = 0;
-            for (i=1; i<argc; i++) {
-                strsize += strlen(argv[i]);
-                if (argc > i+1)
-                    strsize++;
-            }
-            printf("strsize: %d\n", strsize);
-
             char *cmdstring;
+            char strsize = strsize[50];
             cmdstring = malloc(strsize);
             cmdstring[0] = '\0';
 
