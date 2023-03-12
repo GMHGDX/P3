@@ -17,7 +17,7 @@
 #include <sys/msg.h> //message queues
 #include "oss.h"
 
-void printTable(fileLogging);
+void printTable();
 
 struct msgqueue {
     long mtype;
