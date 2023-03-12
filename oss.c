@@ -98,10 +98,11 @@ int main(int argc, char *argv[]){
 			//printf("timelimit,t: %i \n", timelimit);
             break;
         case 'f':
-        for(i = 0; i < argc; i++){
-            printf("%s\n", argv[i]);
-        }
-        break;
+            // for(i = 0; i < argc; i++){
+            //     printf("%s\n", argv[i]);
+            // }
+             printf("%s\n", optarg);
+            break;
         default:
             printf ("Invalid option %c \n", optopt);
             return (EXIT_FAILURE);
