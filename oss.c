@@ -320,7 +320,7 @@ int main(int argc, char *argv[]){
 }
 
 //Print the process table
-void printTable(char* fileLogging){
+void printTable(FILE* fileLogging){
     fprintf(fileLogging, "Entry\tOccupied\tPID\t\tStartS\t\tStartN\n");
     int i;
     for(i=0;i<20;i++){
