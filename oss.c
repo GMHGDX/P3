@@ -328,6 +328,6 @@ void printTable(FILE* fileLogging){
         if(processTable[i].pid == 0 ){
             break;
         }
-        printf("%i\t%d\t\t%ld\t\t%f\t%f\n", i, processTable[i].occupied, (long)processTable[i].pid, processTable[i].sec, processTable[i].nano);
+        fprintf(fileLogging, "%i\t%d\t\t%ld\t\t%f\t%f\n", i, processTable[i].occupied, (long)processTable[i].pid, processTable[i].sec, processTable[i].nano);
     }
 }
