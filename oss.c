@@ -17,7 +17,7 @@
 #include <sys/msg.h> //message queues
 #include "oss.h"
 
-void printTable();
+void printTable(fileLogging);
 
 struct msgqueue {
     long mtype;
@@ -169,7 +169,7 @@ int main(int argc, char *argv[]){
     double currentTime, lastPrintTime=0;
 
     //Open the log file before input begins 
-    FILE *fileLogging = fopen(logFile, "w+");
+    fileLogging = fopen(logFile, "w+");
     
     //Loop to check for terminated children
     while(1) {
