@@ -111,7 +111,6 @@ int main(int argc, char *argv[]){
         processTable[j].pid = 0;
         processTable[j].occupied = 0;
     }
-    printTable(fileLogging);
 
     //Create random second and nanosecond from user input
     srand(time(0));
