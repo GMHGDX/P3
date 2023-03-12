@@ -43,6 +43,8 @@ int main(int argc, char *argv[]){
 
 	//bound of time that a child process will be launched for (t)
 	int timelimit= 2;
+
+    //logfile declaration
     char logFile[50];
 
     //variables for our system clock
@@ -96,8 +98,10 @@ int main(int argc, char *argv[]){
 			//printf("timelimit,t: %i \n", timelimit);
             break;
         case 'f':
-            logFile = optarg;
-            break;
+        for(i = 0; i < argc; i++){
+            printf("%s\n", argv[i]);
+        }
+        break;
         default:
             printf ("Invalid option %c \n", optopt);
             return (EXIT_FAILURE);
