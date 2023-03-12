@@ -51,7 +51,9 @@ int main(int argc, char *argv[]){
     struct timespec start, stop;
     double sec;
     double nano;
-    int i = 0;
+
+    //for the file 
+    FILE *fileLogging;
 
     //child process ID
     pid_t childpid = 0;
@@ -158,7 +160,7 @@ int main(int argc, char *argv[]){
 
     //intialize values for use in while loop
     int childrenToLaunch = 0;
-    //int i = 0;
+    int i = 0;
     int status;
     pid_t return_pid;
     bool allChildrenHaveFinished = false;
@@ -166,6 +168,9 @@ int main(int argc, char *argv[]){
 
     double currentTime, lastPrintTime=0;
 
+    //Open the log file before input begins 
+    FILE *fileLogging = fopen(logFile, "w+");
+    
     //Loop to check for terminated children
     while(1) {
         if (childpid != 0){
@@ -216,16 +221,16 @@ int main(int argc, char *argv[]){
         if(currentTime > (lastPrintTime + 0.5) || lastPrintTime == 0){
             lastPrintTime = currentTime;
 
-            printf("OSS PID: %ld SysClockS: %f SysclockNano: %f\n", (long)getpid(), sec, nano);
-            printf("Process Table:\n");
+            fprintf("OSS PID: %ld SysClockS: %f SysclockNano: %f\n", (long)getpid(), sec, nano);
+            fprintf("Process Table:\n");
             printTable();
-            printf("\n\n");
+            fprintf("\n\n");
         }
 
         //Check if all children have been created, check if all children have finished or if time has surpassed 60 seconds
         if(((childrenToLaunch >= proc) && (allChildrenHaveFinished)) || currentTime >= 60){    
-            printf("OSS PID: %ld SysClockS: %f SysclockNano: %f\n", (long)getpid(), sec, nano);
-            printf("Process Table:\n");
+            fprintf("OSS PID: %ld SysClockS: %f SysclockNano: %f\n", (long)getpid(), sec, nano);
+            fprintf("Process Table:\n");
             printTable();
             break; //program can end, all child processes are done
         }
@@ -310,6 +315,7 @@ int main(int argc, char *argv[]){
             perror("msgctl");
             return EXIT_FAILURE;
     }
+    fclose(fileLogging);
     return 0;
 }
 
