@@ -19,6 +19,7 @@
 
 void printTable();
 
+//My message queue initialization
 struct msgqueue {
     long mtype;
     char mtext[200];
@@ -57,16 +58,6 @@ int main(int argc, char *argv[]){
 
     //child process ID
     pid_t childpid = 0;
-
-    //initialize the process table
-    int j;
-    for(j=0;j<20;j++){
-        processTable[j].nano = (double)0;
-        processTable[j].sec = (double)0;
-        processTable[j].pid = 0;
-        processTable[j].occupied = 0;
-    }
-    printTable(fileLogging);
 
     //Parse through command line options
 	char opt;
@@ -108,6 +99,19 @@ int main(int argc, char *argv[]){
             return (EXIT_FAILURE);
         }
     }
+
+    //Open the log file before input begins 
+    fileLogging = fopen(logFile, "w+");
+
+    //initialize the process table
+    int j;
+    for(j=0;j<20;j++){
+        processTable[j].nano = (double)0;
+        processTable[j].sec = (double)0;
+        processTable[j].pid = 0;
+        processTable[j].occupied = 0;
+    }
+    printTable(fileLogging);
 
     //Create random second and nanosecond from user input
     srand(time(0));
@@ -167,9 +171,6 @@ int main(int argc, char *argv[]){
     int currentChildren=0;
 
     double currentTime, lastPrintTime=0;
-
-    //Open the log file before input begins 
-    fileLogging = fopen(logFile, "w+");
     
     //Loop to check for terminated children
     while(1) {
