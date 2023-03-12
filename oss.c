@@ -45,13 +45,13 @@ int main(int argc, char *argv[]){
 	int timelimit= 2;
 
     //logfile declaration
-    char logFile[50];
+
 
     //variables for our system clock
     struct timespec start, stop;
     double sec;
     double nano;
-    int i;
+    int i = 0;
 
     //child process ID
     pid_t childpid = 0;
@@ -159,7 +159,7 @@ int main(int argc, char *argv[]){
 
     //intialize values for use in while loop
     int childrenToLaunch = 0;
-    int i = 0;
+    //int i = 0;
     int status;
     pid_t return_pid;
     bool allChildrenHaveFinished = false;
