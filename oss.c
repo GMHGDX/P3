@@ -45,7 +45,7 @@ int main(int argc, char *argv[]){
 	int timelimit= 2;
 
     //logfile declaration
-
+    char* logFile;
 
     //variables for our system clock
     struct timespec start, stop;
@@ -98,10 +98,8 @@ int main(int argc, char *argv[]){
 			//printf("timelimit,t: %i \n", timelimit);
             break;
         case 'f':
-            // for(i = 0; i < argc; i++){
-            //     printf("%s\n", argv[i]);
-            // }
-             printf("%s\n", optarg);
+            logFile = optarg; 
+             printf("%s\n", logFile);
             break;
         default:
             printf ("Invalid option %c \n", optopt);
