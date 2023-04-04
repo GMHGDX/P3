@@ -319,8 +319,8 @@ int main(int argc, char *argv[]){
 
 //Print the process table
 void printTable(FILE* fileLogging){
-    printf("Entry\tOccupied\tPID\t\tStartS\t\tStartN\n");
-    fprintf(fileLogging, "Entry\tOccupied\tPID\t\tStartS\t\tStartN\n");
+    printf("Pos\tOccupied\tPID\t\tStartS\t\tStartN\n");
+    fprintf(fileLogging, "Pos\tOccupied\tPID\t\tStartS\t\tStartN\n");
     
     int i;
     for(i=0;i<20;i++){
