@@ -319,8 +319,8 @@ int main(int argc, char *argv[]){
 
 //Print the process table
 void printTable(FILE* fileLogging){
-    printf("Pos\tOccupied\tPID\t\tStartS\t\tStartN\n");
-    fprintf(fileLogging, "Pos\tOccupied\tPID\t\tStartS\t\tStartN\n");
+    printf("Entry\tOccupied\tPID\t\tStartS\t\tStartN\n");
+    fprintf(fileLogging, "Entry\tOccupied\tPID\t\tStartS\t\tStartN\n");
     
     int i;
     for(i=0;i<20;i++){
@@ -328,7 +328,7 @@ void printTable(FILE* fileLogging){
             break;
         }
         
-        printf("%i\t\t\t%d\t\t%ld\t\t%f\t%f\n", i, processTable[i].occupied, (long)processTable[i].pid, processTable[i].sec, processTable[i].nano);
+        printf("%i\t%d\t\t%ld\t\t%f\t%f\n", i, processTable[i].occupied, (long)processTable[i].pid, processTable[i].sec, processTable[i].nano);
         fprintf(fileLogging, "%i\t%d\t\t%ld\t\t%f\t%f\n", i, processTable[i].occupied, (long)processTable[i].pid, processTable[i].sec, processTable[i].nano);     
     }
 }
