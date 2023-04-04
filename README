@@ -21,6 +21,8 @@ To know how to run the project, run this command:
 If you want to skip the sick, cool, awesome, fun, wordy, informative, help command above, run this command below: 
 ./oss -s # -n # -t # -f 'string'      <-(# - any integer | 'string' - any name you want for the log file) (These could be arranged in any order)
 
+To clean, run this command: 
+make clean
 ---
 
 What was done this project (notes for me):

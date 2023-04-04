@@ -328,7 +328,7 @@ void printTable(FILE* fileLogging){
             break;
         }
         
-        printf("%i\t%d\t\t%ld\t\t%f\t%f\n", i, processTable[i].occupied, (long)processTable[i].pid, processTable[i].sec, processTable[i].nano);
+        printf("%i\t\t\t%d\t\t%ld\t\t%f\t%f\n", i, processTable[i].occupied, (long)processTable[i].pid, processTable[i].sec, processTable[i].nano);
         fprintf(fileLogging, "%i\t%d\t\t%ld\t\t%f\t%f\n", i, processTable[i].occupied, (long)processTable[i].pid, processTable[i].sec, processTable[i].nano);     
     }
 }
