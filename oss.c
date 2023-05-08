@@ -146,7 +146,8 @@ int main(int argc, char *argv[]){
         fprintf(stderr,"Shared memory attach failed\n");
         exit(1);
     }
-
+    printf("OSS - shm_ptr is %p\n", shm_ptr);
+    
     //start the simulated system clock
     if( clock_gettime( CLOCK_REALTIME, &start) == -1 ) {
       perror( "clock gettime" );

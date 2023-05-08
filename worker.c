@@ -71,6 +71,7 @@ int main(int argc, char *argv[]){
         fprintf(stderr,"Child Shared memory attach failed\n");
         exit(1);
     }
+    printf("Worker - shm_ptr is %p\n", shm_ptr);
 
     //read time from memory
     struct PCB readFromMem;
@@ -105,6 +106,7 @@ int main(int argc, char *argv[]){
             checkSec++;
         }
     }
+    
     //print when child has finished loop and terminating
     printf("WORKER PID: %ld PPID: %ld SysClockS: %i SysclockNano: %i TermTimeS: %i TermTimeNano: %i\n --Terminating\n",(long)getpid(), (long)getppid(), sysClockS, sysClockNano, termTimeS, termTimeNano);
 
